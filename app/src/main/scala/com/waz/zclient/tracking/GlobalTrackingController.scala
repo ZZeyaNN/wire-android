@@ -25,7 +25,7 @@ import com.waz.content.Preferences.PrefKey
 import com.waz.content.{GlobalPreferences, MembersStorage, UsersStorage}
 import com.waz.model.ConversationData.ConversationType
 import com.waz.model.{UserId, _}
-import com.waz.service.{ZMessaging, ZmsLifeCycle}
+import com.waz.service.{UiLifeCycle, ZMessaging}
 import com.waz.threading.{SerialDispatchQueue, Threading}
 import com.waz.utils._
 import com.waz.utils.events.{EventContext, Signal}
@@ -65,7 +65,7 @@ class GlobalTrackingController(implicit inj: Injector, cxt: WireContext, eventCo
 
   def trackingEnabled = ZMessaging.globalModule.flatMap(_.prefs.preference(prefKey).apply())
 
-  inject[ZmsLifeCycle].uiActive.onChanged {
+  inject[UiLifeCycle].uiActive.onChanged {
     case false =>
       mixpanel.foreach { m =>
         verbose("flushing mixpanel events")
